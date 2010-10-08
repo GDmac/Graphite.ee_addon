@@ -34,10 +34,10 @@ $output .= $this->_make_chart();
 4. Jump down to the bottom of the file and just before the final closing '}', paste the following function
 --------------------------------------------------------  
 function _make_chart(){
-	                                                     
+
 	$data = base64_encode(serialize($this->TMPL->log));       
 	$filename = implode('-',$this->uri->segments).'_'.time();  
-	
+
 	//save to a dump file  		               
   $cache_path = APPPATH.'cache/graphite_cache/';                                          	
   $cache_file = $cache_path . $filename;         
@@ -60,15 +60,18 @@ function _make_chart(){
   flock($fp, LOCK_UN);
   fclose($fp);
   @chmod($cache_file, 0777);    
-                              
-  $vars['file'] = base64_encode(serialize($cache_file));              
+         
 	$theme_folder_url = $this->config->item('theme_folder_url');
 	if (substr($theme_folder_url, -1) != '/') $theme_folder_url .= '/';
-  $vars['theme_path'] = $theme_folder_url.'third_party/jb_graphite/js/';
-	
-	return $this->load->view('../third_party/jb_graphite/chart',$vars,TRUE);                                                                                                                      
- 
-} 
+  $theme_folder_url = $theme_folder_url.'third_party/jb_graphite/';
+
+
+  $f = base64_encode(serialize($cache_file));
+  $t = base64_encode(serialize($theme_folder_url));
+  
+	return "<iframe height='500px' width='98%' src='".$theme_folder_url."graphite.php?t=".$t."&f=".$f."'></iframe>";                                                                                                                    
+
+}
 --------------------------------------------------------  
 
 5. Load, review, tune. 
