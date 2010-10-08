@@ -19,7 +19,7 @@ This plugin was created by Joel Bradbury
 
 $plugin_info = array(
 						'pi_name'			=> 'JB Graphite',
-						'pi_version'		=> '1.0',
+						'pi_version'		=> '1.1',
 						'pi_author'			=> 'Joel Bradbury',
 						'pi_author_url'	=> 'http://joelbradbury.com/',
 						'pi_description'	=> 'Turn the template debug output into a useful graph',
