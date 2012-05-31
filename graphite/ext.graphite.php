@@ -158,36 +158,38 @@ class Graphite_ext {
 	 */
 	public function template_post_parse( $final_template, $sub, $site_id )
 	{	
-
-		// Is logging enabled and the current user in group 1?
-		// if not, do nothing
-
-		
-		if (isset($this->EE->TMPL) && 
-			is_object($this->EE->TMPL) && 
-			isset($this->EE->TMPL->debugging) && 
-			$this->EE->TMPL->debugging === TRUE && 
-			$this->EE->TMPL->template_type != 'js')
+		if( !$sub )
 		{
-			if ($this->EE->session->userdata['group_id'] == 1)
-			{		
+			// Is logging enabled and the current user in group 1?
+			// if not, do nothing
 
-				$theme_url = $this->EE->config->item('theme_folder_url').'third_party/graphite/js/';
+			
+			if (isset($this->EE->TMPL) && 
+				is_object($this->EE->TMPL) && 
+				isset($this->EE->TMPL->debugging) && 
+				$this->EE->TMPL->debugging === TRUE && 
+				$this->EE->TMPL->template_type != 'js')
+			{
+				if ($this->EE->session->userdata['group_id'] == 1)
+				{		
 
-				$append = "<div class='graphite_template_logging'>";
-				$append .= '<script type="text/javascript" src="'. $theme_url . 'raphael-min.js"></script>';
-				$append .= '<script type="text/javascript" src="'. $theme_url . 'popup.js"></script>';
-				$append .= '<script type="text/javascript" src="'. $theme_url . 'jquery.js"></script>';
-				$append .= '<script type="text/javascript" src="'. $theme_url . 'graphite.js"></script>';
-				$append .= '<script type="text/javascript" src="'. $theme_url . 'analytics.js"></script>';
-				$append .= "</div>";
-				$append .= '<div id="graphite_log_graph_holder" style="background:#000"></div>';
+					$theme_url = $this->EE->config->item('theme_folder_url').'third_party/graphite/js/';
 
-				$final_template .= $append;
+					$append = "<div class='graphite_template_logging'>";
+					$append .= '<script type="text/javascript" src="'. $theme_url . 'raphael-min.js"></script>';
+					$append .= '<script type="text/javascript" src="'. $theme_url . 'popup.js"></script>';
+					$append .= '<script type="text/javascript" src="'. $theme_url . 'jquery.js"></script>';
+					$append .= '<script type="text/javascript" src="'. $theme_url . 'graphite.js"></script>';
+					$append .= '<script type="text/javascript" src="'. $theme_url . 'analytics.js"></script>';
+					$append .= "</div>";
+					$append .= '<div id="graphite_log_graph_holder" style="background:#000; margin-bottom : 50px;"></div>';
 
+					$final_template .= $append;
+
+				}
 			}
 		}
-
+		
 		return $final_template;
 	}	
 
