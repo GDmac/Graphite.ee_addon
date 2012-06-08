@@ -1,182 +1,114 @@
-$(window).load(function(){
 
-	var legend = [];
-	var points = [];
-	var memory_points = [];
+  // Load the Visualization API and the piechart package.
+  google.load('visualization', '1.0', {'packages':['corechart']});
 
-     // Check to see if the log is displayed on the page
+  // Set a callback to run when the Google Visualization API is loaded.
+  $(window).load(function(){
+      drawChart();
+  });
+
+  function drawChart() {
+
+    var data = getLogData();
+
+    var options = {curveType: "none", height: 400,
+    vAxis: {0: {logScale: false},
+            1: {logScale: false}},
+    series:{
+       0:{targetAxisIndex:0},
+       1:{targetAxisIndex:1}},
+       backgroundColor : '#ededed',
+       fontSize : 11};
+
+
+    var chart = new google.visualization.LineChart(document.getElementById('graphite_log_graph_holder'));
+    chart.draw(data, options);
+  }
+
+
+  function getLogData()
+  {
+
+    var data = new google.visualization.DataTable();
+
+    data.addColumn('string', 'x');
+    data.addColumn('number', 'Time (seconds)');
+    data.addColumn('number', 'Memory (mb)');
+
     $('div:contains("- Begin Template Processing -")').each(function(){
 
-        // Right, the template log is here. Great. lets go for it, 
-        // using the first as our start marker, and going right to the end of the document
-          
-        var replace = {"\t":'',' ':' ','&amp;nbsp;':' ','&amp;':' ','&nbsp;':' ', '-gt;':'-'};
-        var $that = $(this);
+      var replace = {"\t":'',' ':' ','&amp;nbsp;':' ','&amp;':' ','&nbsp;':' ', '-&gt;':'-'};
+      var $that = $(this);
 
-        $(this).siblings().each(function(){
+     $(this).siblings().each(function(){
 
-            text = $(this).html();
+          text = $(this).html();
 
-          	for (var val in replace) {
-          		text = text.replace(new RegExp(val, "g"), replace[val]);
-          	}
+          for (var val in replace) {
+            text = text.replace(new RegExp(val, "g"), replace[val]);
+          }
 
-          	if( text.indexOf( '<strong>(') == 0 ) {
-                // Good - this is a log marker, clean it
-          		clean = text.replace( '<strong>(', '' );
+          if( text.indexOf( '<strong>(') == 0 ) {
+              // Good - this is a log marker, clean it
+            clean = text.replace( '<strong>(', '' );
 
-          		clean_arr = clean.split( 'MB)' );
-          		out_text = clean_arr[1].replace('</strong>', ' ');
+            clean_arr = clean.split( 'MB)' );
+            out_text = clean_arr[1].replace('</strong>', ' ');
 
-          		clean_arr = clean_arr[0].split(' / ');
-          		time = clean_arr[0];
-          		memory = clean_arr[1];
+            clean_arr = clean_arr[0].split(' / ');
+            time = clean_arr[0];
+            memory = clean_arr[1];
 
-          		legend.push( out_text );
-          		points.push( time );
-          		memory_points.push( memory );
-          	}
+            data.addRow( [ out_text, parseFloat(time), parseFloat(memory) ] );
 
-        });
+          }
+
+      });
 
     });
 
 
-    Raphael.fn.drawGrid = function (x, y, w, h, wv, hv, color) {
-        color = color || "#000";
+    console.log(data);
+    return data;
+  }
 
-        var path = ["M", Math.round(x) + .5, Math.round(y) + .5, "L", Math.round(x + w) + .5, Math.round(y) + .5, Math.round(x + w) + .5, Math.round(y + h) + .5, Math.round(x) + .5, Math.round(y + h) + .5, Math.round(x) + .5, Math.round(y) + .5],
-            rowHeight = h / hv,
-            columnWidth = w / wv;
 
-        for (var i = 1; i < hv; i++) {
-            path = path.concat(["M", Math.round(x) + .5, Math.round(y + i * rowHeight) + .5, "H", Math.round(x + w) + .5]);
-        }
 
-        for (i = 1; i < wv; i++) {
-            path = path.concat(["M", Math.round(x + i * columnWidth) + .5, Math.round(y) + .5, "V", Math.round(y + h) + .5]);
-        }
-        return this.path(path.join(",")).attr({stroke: color});
-    };
+/*
+// Check to see if the log is displayed on the page
+$('div:contains("- Begin Template Processing -")').each(function(){
 
-    function getAnchors(p1x, p1y, p2x, p2y, p3x, p3y) {
-        var l1 = (p2x - p1x) / 2,
-            l2 = (p3x - p2x) / 2,
-            a = Math.atan((p2x - p1x) / Math.abs(p2y - p1y)),
-            b = Math.atan((p3x - p2x) / Math.abs(p2y - p3y));
-            a = p1y < p2y ? Math.PI - a : a;
-            b = p3y < p2y ? Math.PI - b : b;
-        
-        var alpha = Math.PI / 2 - ((a + b) % (Math.PI * 2)) / 2,
-            dx1 = l1 * Math.sin(alpha + a),
-            dy1 = l1 * Math.cos(alpha + a),
-            dx2 = l2 * Math.sin(alpha + b),
-            dy2 = l2 * Math.cos(alpha + b);
-
-        return {
-            x1: p2x - dx1,
-            y1: p2y + dy1,
-            x2: p2x + dx2,
-            y2: p2y + dy2
-        };
-    }
+    // Right, the template log is here. Great. lets go for it, 
+    // using the first as our start marker, and going right to the end of the document
       
-    var labels = legend,
-        data = memory_points;
-    		
-    // Draw
-    var width = $("#graphite_log_graph_holder").width(),
-        height = 400,
-        leftgutter = 30,
-        bottomgutter = 20,
-        topgutter = 20,
-        colorhue = .6 || Math.random(),
-        color = "hsb(" + [colorhue, .5, 1] + ")",
-        r = Raphael("graphite_log_graph_holder", width, height),
-        txt = {font: '16px Helvetica, Arial', fill: "#fff"},
-        txt1 = {font: '14px Helvetica, Arial', fill: "blue"},
-        txt2 = {font: '12px Helvetica, Arial', fill: "#000"},
-        X = (width - leftgutter) / labels.length,
-        max = Math.max.apply(Math, data),
-        Y = (height - bottomgutter - topgutter) / max;
+    var replace = {"\t":'',' ':' ','&amp;nbsp;':' ','&amp;':' ','&nbsp;':' ', '-gt;':'-'};
+    var $that = $(this);
 
-    r.drawGrid(leftgutter + X * .5 + .5, topgutter + .5, width - leftgutter - X, height - topgutter - bottomgutter, 10, 10, "#333");
+    $(this).siblings().each(function(){
 
-    var path = r.path().attr({stroke: color, "stroke-width": 4, "stroke-linejoin": "round"}),
-        bgp = r.path().attr({stroke: "none", opacity: .3, fill: color}),
-        label = r.set(),
-        is_label_visible = false,
-        leave_timer,
-        blanket = r.set();
+        text = $(this).html();
 
-    label.push(r.text(60, 12, "a").attr(txt));
-    label.push(r.text(60, 27, "b").attr(txt1).attr({fill: color}));
-    label.hide();
-
-    var frame = r.popup(100, 100, label, "right").attr({fill: "#000", stroke: "#fff", "stroke-width": 2, "fill-opacity": .9}).hide();
-    var p, bgpp;
-
-    for (var i = 0, ii = labels.length; i < ii; i++) {
-
-        var y = Math.round(height - bottomgutter - Y * data[i]),
-            x = Math.round(leftgutter + X * (i + .5));
-
-        if (!i) {
-            p = ["M", x, y, "C", x, y];
-            bgpp = ["M", leftgutter + X * .5, height - bottomgutter, "L", x, y, "C", x, y];
-        }
-        if (i && i < ii - 1) {
-            var Y0 = Math.round(height - bottomgutter - Y * data[i - 1]),
-                X0 = Math.round(leftgutter + X * (i - .5)),
-                Y2 = Math.round(height - bottomgutter - Y * data[i + 1]),
-                X2 = Math.round(leftgutter + X * (i + 1.5));
-            var a = getAnchors(X0, Y0, x, y, X2, Y2);
-
-            p = p.concat([a.x1, a.y1, x, y, a.x2, a.y2]);
-            bgpp = bgpp.concat([a.x1, a.y1, x, y, a.x2, a.y2]);
+        for (var val in replace) {
+          text = text.replace(new RegExp(val, "g"), replace[val]);
         }
 
-        var dot = r.circle(x, y, 4).attr({fill: "#000", stroke: color, "stroke-width": 2});
-        blanket.push(r.rect(leftgutter + X * i, 0, X, height - bottomgutter).attr({stroke: "#000", fill: "#fff", opacity: 0}));
-        var rect = blanket[blanket.length - 1];
-       
-        (function (x, y, data, lbl, dot) {
-            var timer, i = 0;
-            rect.hover(function () {
+        if( text.indexOf( '<strong>(') == 0 ) {
+            // Good - this is a log marker, clean it
+          clean = text.replace( '<strong>(', '' );
 
-                clearTimeout(leave_timer);
-                var side = "right";
-                if (x + frame.getBBox().width > width) {
-                    side = "left";
-                }
+          clean_arr = clean.split( 'MB)' );
+          out_text = clean_arr[1].replace('</strong>', ' ');
 
-                var ppp = r.popup(x, y, label, side, 1);
+          clean_arr = clean_arr[0].split(' / ');
+          time = clean_arr[0];
+          memory = clean_arr[1];
 
-                label[0].attr({text: data  + (data == 1 ? "" : "s"), 'text-anchor' : 'start' }).show().stop().animateWith(frame, {translation: [ppp.dx, ppp.dy]}, 200 * is_label_visible);
+          legend.push( out_text );
+          points.push( time );
+          memory_points.push( memory );
+        }
 
-                label[1].attr({text: lbl, 'text-anchor' : 'start' }).show().stop().animateWith(frame, {translation: [ppp.dx, ppp.dy]}, 200 * is_label_visible);
-                dot.attr("r", 6);
-                is_label_visible = true;
-
-            }, function () {
-                dot.attr("r", 4);
-                leave_timer = setTimeout(function () {
-                    frame.hide();
-                    label[0].hide();
-                    label[1].hide();
-                    is_label_visible = false;
-                }, 1);
-            });                     
-        })(x, y, data[i], labels[i], dot);
-    }
-
-    p = p.concat([x, y, x, y]);
-    bgpp = bgpp.concat([x, y, x, y, "L", x, height - bottomgutter, "z"]);
-    path.attr({path: p});
-    bgp.attr({path: bgpp});
-    frame.toFront();
-    label[0].toFront();
-    label[1].toFront();
-    blanket.toFront();
+    });
 
 });
+*/
