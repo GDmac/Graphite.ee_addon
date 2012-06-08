@@ -10,7 +10,7 @@ $(window).load(function(){
         // Right, the template log is here. Great. lets go for it, 
         // using the first as our start marker, and going right to the end of the document
           
-        var replace = {"\t":'',' ':' ','&amp;nbsp;':' ','&amp;':' ','&nbsp;':' '};
+        var replace = {"\t":'',' ':' ','&amp;nbsp;':' ','&amp;':' ','&nbsp;':' ', '-gt;':'-'};
         var $that = $(this);
 
         $(this).siblings().each(function(){
@@ -82,7 +82,7 @@ $(window).load(function(){
     }
       
     var labels = legend,
-        data = points;
+        data = memory_points;
     		
     // Draw
     var width = $("#graphite_log_graph_holder").width(),

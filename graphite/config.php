@@ -13,10 +13,11 @@ if ( ! defined('GRAPHITE_NAME'))
 {
 	define('GRAPHITE_NAME',         'Graphite');
 	define('GRAPHITE_CLASS_NAME',   'Graphite');
-	define('GRAPHITE_VERSION',      '2.1');
+	define('GRAPHITE_VERSION',      '2.2');
 	define('GRAPHITE_DOCS',         'http://squarebit.co.uk/graphite');
 
 }
 
 $config['name']    = GRAPHITE_NAME;
 $config['version'] = GRAPHITE_VERSION;
+$config['nsm_addon_updater']['versions_xml']='http://squarebit.co.uk/versions/graphite.xml';

@@ -176,12 +176,12 @@ class Graphite_ext {
 					$theme_url = $this->EE->config->item('theme_folder_url').'third_party/graphite/js/';
 
 					$append = "<div class='graphite_template_logging'>";
-					$append .= '<script type="text/javascript" src="'. $theme_url . 'raphael-min.js"></script>';
-					$append .= '<script type="text/javascript" src="'. $theme_url . 'popup.js"></script>';
+				
 					$append .= '<script type="text/javascript" src="'. $theme_url . 'jquery.js"></script>';
-					$append .= '<script type="text/javascript" src="'. $theme_url . 'graphite.js"></script>';
-					$append .= '<script type="text/javascript" src="'. $theme_url . 'analytics.js"></script>';
+   					$append .= '<script type="text/javascript" src="https://www.google.com/jsapi"></script>'; 
+   					$append .= '<script type="text/javascript" src="'. $theme_url . 'gchart.js"></script>';
 					$append .= "</div>";
+					$append .= '<div style="text-align: left; font-family: Sans-serif; font-size: 11px; margin: 12px; padding: 6px"><hr size="1"><b>TEMPLATE EXECTUTION GRAPH</b><hr size="1"></div>';
 					$append .= '<div id="graphite_log_graph_holder" style="background:#000; margin-bottom : 50px;"></div>';
 
 					$final_template .= $append;
