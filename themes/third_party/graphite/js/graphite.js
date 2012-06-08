@@ -1,33 +1,34 @@
 
-  // Load the Visualization API and the piechart package.
-  google.load('visualization', '1.0', {'packages':['corechart']});
+// Load the Visualization API and the piechart package.
+google.load('visualization', '1.0', {'packages':['corechart']});
 
-  // Set a callback to run when the Google Visualization API is loaded.
-  $(window).load(function(){
-      drawChart();
-  });
+// Set a callback to run when the Google Visualization API is loaded.
+$(window).load(function(){
+  drawChart();
+});
 
-  function drawChart() {
+function drawChart() {
 
     var data = getLogData();
 
-    var options = {curveType: "none", height: 400,
-    vAxis: {0: {logScale: false},
-            1: {logScale: false}},
-    series:{
-       0:{targetAxisIndex:0},
-       1:{targetAxisIndex:1}},
-       backgroundColor : '#ededed',
-       fontSize : 11};
+    var options = {
+        curveType: "none", 
+        height: 400,
+        vAxis: {0: {logScale: false},
+                1: {logScale: false}},
+        series:{
+                0:{targetAxisIndex:0},
+                1:{targetAxisIndex:1}},
+        backgroundColor : '#ededed',
+        fontSize : 11 };
 
 
     var chart = new google.visualization.LineChart(document.getElementById('graphite_log_graph_holder'));
     chart.draw(data, options);
-  }
+}
 
 
-  function getLogData()
-  {
+function getLogData() {
 
     var data = new google.visualization.DataTable();
 
@@ -67,48 +68,5 @@
 
     });
 
-
-    console.log(data);
     return data;
-  }
-
-
-
-/*
-// Check to see if the log is displayed on the page
-$('div:contains("- Begin Template Processing -")').each(function(){
-
-    // Right, the template log is here. Great. lets go for it, 
-    // using the first as our start marker, and going right to the end of the document
-      
-    var replace = {"\t":'',' ':' ','&amp;nbsp;':' ','&amp;':' ','&nbsp;':' ', '-gt;':'-'};
-    var $that = $(this);
-
-    $(this).siblings().each(function(){
-
-        text = $(this).html();
-
-        for (var val in replace) {
-          text = text.replace(new RegExp(val, "g"), replace[val]);
-        }
-
-        if( text.indexOf( '<strong>(') == 0 ) {
-            // Good - this is a log marker, clean it
-          clean = text.replace( '<strong>(', '' );
-
-          clean_arr = clean.split( 'MB)' );
-          out_text = clean_arr[1].replace('</strong>', ' ');
-
-          clean_arr = clean_arr[0].split(' / ');
-          time = clean_arr[0];
-          memory = clean_arr[1];
-
-          legend.push( out_text );
-          points.push( time );
-          memory_points.push( memory );
-        }
-
-    });
-
-});
-*/
+}
