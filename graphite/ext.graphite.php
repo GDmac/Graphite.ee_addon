@@ -181,7 +181,7 @@ class Graphite_ext {
    					$append .= '<script type="text/javascript" src="https://www.google.com/jsapi"></script>'; 
    					$append .= '<script type="text/javascript" src="'. $theme_url . 'graphite.js"></script>';
 					$append .= "</div>";
-					$append .= '<div style="text-align: left; font-family: Sans-serif; font-size: 11px; margin: 12px; padding: 6px"><hr size="1"><b>TEMPLATE EXECTUTION GRAPH</b><hr size="1"></div>';
+					$append .= '<div style="text-align: left; font-family: Sans-serif; font-size: 11px; margin: 12px; padding: 6px"><hr size="1"><b>TEMPLATE EXECUTION GRAPH</b><hr size="1"></div>';
 					$append .= '<div id="graphite_log_graph_holder" style="background:#000; margin-bottom : 50px;"></div>';
 
 					$final_template .= $append;
