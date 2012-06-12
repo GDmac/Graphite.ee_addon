@@ -1,0 +1,48 @@
+Installation
+---
+
+On EE1.x the necessary hooks for one-click installation don't exist.
+
+To install you'll need to add the following code to a CORE file.
+
+---
+
+$theme_url = $PREFS->ini('theme_folder_url'). 'third_party/graphite/js/';
+$buffer .= "<div class='graphite_template_logging'>";
+
+$buffer .= '<script type="text/javascript" src="'. $theme_url . 'jquery.js"></script>';
+$buffer .= '<script type="text/javascript" src="https://www.google.com/jsapi"></script>'; 
+$buffer .= '<script type="text/javascript" src="'. $theme_url . 'graphite.js"></script>';
+$buffer .= "</div>";
+
+$buffer .= '<div style="background-color : #ededed;">';
+$buffer .= '<div style="text-align: left; font-family: Sans-serif; font-size: 11px; margin: 12px; padding: 6px"><hr size="1"><b>TEMPLATE EXECUTION GRAPH</b><hr size="1"></div>';
+$buffer .= '<div id="graphite_log_graph_holder" style="background:#000; margin-bottom : 50px;"></div></div>';
+
+
+---
+
+Add to core.output.php. 
+
+Find this line, around line 350 in EE1.7.1
+
+---
+if (is_object($TMPL) && isset($TMPL->debugging) && $TMPL->debugging === TRUE && $TMPL->template_type != 'js')
+        {
+        	if ($SESS->userdata['group_id'] == 1)
+			{	
+---
+
+Add the above code immediatly after that, before the existing $buffer.= ... output.
+
+
+
+Also, drop the theme files to themes/third_party/graphite. 
+
+This will only be triggered for super_admins and when template logging is enabled.
+
+Note : Memory usage output will not work on EE1.x as the memory logging function isn't available in the logging mechanism.
+
+---
+
+

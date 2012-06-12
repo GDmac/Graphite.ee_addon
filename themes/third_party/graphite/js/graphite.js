@@ -14,11 +14,6 @@ function drawChart() {
     var options = {
         curveType: "none", 
         height: 400,
-        vAxis: {0: {logScale: false},
-                1: {logScale: false}},
-        series:{
-                0:{targetAxisIndex:0},
-                1:{targetAxisIndex:1}},
         backgroundColor : '#ededed',
         fontSize : 11 };
 
@@ -34,7 +29,7 @@ function getLogData() {
 
     data.addColumn('string', 'x');
     data.addColumn('number', 'Time (seconds)');
-    data.addColumn('number', 'Memory (mb)');
+ //   data.addColumn('number', 'Memory (mb)');
 
     $('div:contains("- Begin Template Processing -")').each(function(){
 
@@ -53,14 +48,14 @@ function getLogData() {
               // Good - this is a log marker, clean it
             clean = text.replace( '<strong>(', '' );
 
-            clean_arr = clean.split( 'MB)' );
+            clean_arr = clean.split( ')' );
             out_text = clean_arr[1].replace('</strong>', ' ');
 
             clean_arr = clean_arr[0].split(' / ');
             time = clean_arr[0];
             memory = clean_arr[1];
 
-            data.addRow( [ out_text, parseFloat(time), parseFloat(memory) ] );
+            data.addRow( [ out_text, parseFloat(time) ] );
 
           }
 
