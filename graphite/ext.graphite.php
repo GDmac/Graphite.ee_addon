@@ -147,6 +147,13 @@ class Graphite_ext {
 	 */
 	public function template_post_parse( $final_template, $sub, $site_id )
 	{	
+		// play nice with other extensions using this hook
+		
+        if (isset($this->EE->extensions->last_call) && $this->EE->extensions->last_call)
+        {
+            $final_template = $this->EE->extensions->last_call;
+        }
+
 		if( !$sub )
 		{
 			// Is logging enabled and the current user in group 1?
@@ -166,7 +173,7 @@ class Graphite_ext {
 
 					$append = "<div class='graphite_template_logging'>";
 				
-					$append .= '<script type="text/javascript" src="'. $theme_url . 'jquery.js"></script>';
+					$append .= "<script>window.jQuery || document.write('<script src=\"{$theme_url}jquery.js\"><\/script>')</script>";
    					$append .= '<script type="text/javascript" src="https://www.google.com/jsapi"></script>'; 
    					$append .= '<script type="text/javascript" src="'. $theme_url . 'graphite.js"></script>';
 					$append .= "</div>";
