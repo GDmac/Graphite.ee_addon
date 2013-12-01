@@ -13,7 +13,7 @@ if ( ! defined('GRAPHITE_NAME'))
 {
 	define('GRAPHITE_NAME',         'Graphite');
 	define('GRAPHITE_CLASS_NAME',   'Graphite');
-	define('GRAPHITE_VERSION',      '2.2');
+	define('GRAPHITE_VERSION',      '2.3');
 	define('GRAPHITE_DOCS',         'http://squarebit.co.uk/graphite');
 
 }

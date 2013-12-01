@@ -8,7 +8,7 @@ include PATH_THIRD.'graphite/config'.EXT;
  * Graphite Extension Class
  *
  * @package         graphite_ee_addon
- * @version         2.2
+ * @version         2.3
  * @author          Joel Bradbury ~ <joel@squarebit.co.uk>
  * @link            http://squarebit.co.uk/graphite
  * @copyright       Copyright (c) 2012, Joel 
