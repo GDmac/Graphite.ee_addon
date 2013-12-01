@@ -51,18 +51,6 @@ class Graphite_ext {
 	// --------------------------------------------------------------------
 
 	/**
-	 * PHP4 Constructor
-	 *
-	 * @see         __construct()
-	 */
-	public function Graphite_ext($settings = FALSE)
-	{
-		$this->__construct($settings);
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Constructor
 	 *
 	 * @access      public
@@ -100,7 +88,8 @@ class Graphite_ext {
 				'hook'      => $hook,
 				'priority'  => 10,
 				'version'   => GRAPHITE_VERSION,
-				'enabled'   => 'y'
+				'enabled'   => 'y',
+				'settings'  => ''
 			));
 		}
 	}
